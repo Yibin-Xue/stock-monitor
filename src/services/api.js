@@ -1,9 +1,9 @@
 // API服务层
 import axios from 'axios';
 
-// 创建axios实例
+// 创建axios实例 - 支持部署环境
 const api = axios.create({
-  baseURL: 'http://localhost:3003/api', // 基础URL
+  baseURL: import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api` : 'http://localhost:3003/api',
   timeout: 10000, // 超时时间
   headers: {
     'Content-Type': 'application/json',

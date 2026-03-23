@@ -16,8 +16,31 @@ console.log('环境变量加载完成:', {
 const app = express();
 const port = process.env.PORT || 3003;
 
+// CORS配置 - 支持部署环境
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://stock-monitor.vercel.app',
+  'https://*.vercel.app',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.some(allowed =>
+      origin === allowed || allowed.includes('*') && origin.match(allowed.replace('*', '.*'))
+    )) {
+      callback(null, true);
+    } else {
+      console.error('CORS错误: 不允许的源', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 // 中间件
-app.use(cors());
 app.use(express.json());
 
 // 导入路由
