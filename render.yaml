@@ -4,9 +4,8 @@ services:
     env: node
     plan: free
     region: singapore
-    buildCommand: npm install
-    startCommand: npm start
-    rootDir: backend
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
     envVars:
       - key: PORT
         value: 3003
@@ -20,25 +19,6 @@ services:
         value: https://ark.cn-beijing.volces.com/api/v3
       - key: DOUBAO_MODEL
         value: doubao-seed-2-0-pro-260215
-      - key: FRONTEND_URL
-        fromService:
-          type: web
-          name: stock-monitor-frontend
-          envVarKey: RENDER_EXTERNAL_URL
-
-  - type: web
-    name: stock-monitor-frontend
-    env: static
-    plan: free
-    region: singapore
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
-    envVars:
-      - key: VITE_API_BASE_URL
-        fromService:
-          type: web
-          name: stock-monitor-backend
-          envVarKey: RENDER_EXTERNAL_URL
     routes:
       - type: rewrite
         source: /*
