@@ -4,8 +4,9 @@ services:
     env: node
     plan: free
     region: singapore
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && npm start
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: PORT
         value: 3003
@@ -19,7 +20,3 @@ services:
         value: https://ark.cn-beijing.volces.com/api/v3
       - key: DOUBAO_MODEL
         value: doubao-seed-2-0-pro-260215
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
