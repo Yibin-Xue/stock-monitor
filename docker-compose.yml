@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  stock-monitor-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: stock-monitor-backend
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+      - TUSHARE_TOKEN=493d8b1bd7edd1c8e716ca6b7af6eda08b176c130b297ea33d0e5c29
+      - DOUBAO_API_KEY=9960c043-3452-40d1-814b-c8b8873843d1
+      - DOUBAO_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
+      - DOUBAO_MODEL=doubao-seed-2-0-pro-260215
+    networks:
+      - stock-monitor-network
+
+  stock-monitor-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: stock-monitor-frontend
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3003
+    networks:
+      - stock-monitor-network
+    depends_on:
+      - stock-monitor-backend
+
+networks:
+  stock-monitor-network:
+    driver: bridge
