@@ -1,0 +1,485 @@
+.stock-analysis {
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
+}
+
+.analysis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #333;
+}
+
+.analysis-header h3 {
+  margin: 0;
+  font-size: 24px;
+  color: #e0e0e0;
+}
+
+.close-btn {
+  background: #2a2a2a;
+  border: 1px solid #333;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: #3a3a3a;
+  color: #e0e0e0;
+  border-color: #1890ff;
+}
+
+.analysis-section {
+  margin-bottom: 24px;
+  padding: 20px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.analysis-section:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.analysis-section h4 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #1890ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.analysis-section h4::before {
+  content: "•";
+  color: #1890ff;
+  font-size: 20px;
+}
+
+/* 初始状态 */
+.analysis-start {
+  text-align: center;
+  padding: 40px;
+}
+
+.analysis-start p {
+  color: #999;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+.analyze-btn {
+  background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.analyze-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
+}
+
+/* 加载状态 */
+.loading-content {
+  text-align: center;
+  padding: 40px;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid #1890ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-content p {
+  color: #999;
+  font-size: 16px;
+}
+
+/* 错误状态 */
+.error-content {
+  text-align: center;
+  padding: 40px;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.retry-btn {
+  background: #1890ff;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.retry-btn:hover {
+  background: #40a9ff;
+}
+
+/* 股票信息 */
+.stock-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-item .label {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.info-item .value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+
+.value.price {
+  color: #1890ff;
+  font-size: 24px;
+}
+
+.value.change.up {
+  color: #52c41a;
+}
+
+.value.change.down {
+  color: #ff4d4f;
+}
+
+.value.source {
+  font-size: 12px;
+  color: #999;
+  font-weight: normal;
+}
+
+/* 投资建议 */
+.recommendation-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main-recommendation {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.rec-badge {
+  color: white;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 28px;
+  font-weight: 700;
+  min-width: 140px;
+  text-align: center;
+}
+
+.rec-details {
+  flex: 1;
+}
+
+.rec-score {
+  font-size: 18px;
+  color: #e0e0e0;
+  margin-bottom: 8px;
+}
+
+.rec-risk {
+  font-size: 14px;
+  color: #999;
+}
+
+.time-frame {
+  display: flex;
+  gap: 24px;
+  padding: 16px;
+  background: #1e1e1e;
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+
+.frame-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.frame-item .status {
+  font-weight: 600;
+}
+
+.frame-item .status.bullish {
+  color: #52c41a;
+}
+
+.frame-item .status.bearish {
+  color: #ff4d4f;
+}
+
+/* 技术分析 */
+.trend-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.trend-card {
+  background: #1e1e1e;
+  padding: 16px;
+  border-radius: 6px;
+  text-align: center;
+  border: 1px solid #333;
+  transition: all 0.3s;
+}
+
+.trend-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  border-color: #1890ff;
+}
+
+.trend-label {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.trend-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #e0e0e0;
+  margin-bottom: 8px;
+}
+
+.trend-indicators {
+  font-size: 12px;
+  color: #999;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.technical-details {
+  background: #1e1e1e;
+  padding: 16px;
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  border: 1px solid #333;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.detail-item .label {
+  color: #999;
+  font-weight: 500;
+}
+
+.detail-item .values {
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.detail-item .values.overbought {
+  color: #ff4d4f;
+}
+
+.detail-item .values.oversold {
+  color: #52c41a;
+}
+
+/* 基本面分析 */
+.fundamental-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.fundamental-card {
+  background: #1e1e1e;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  transition: all 0.3s;
+}
+
+.fundamental-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  border-color: #1890ff;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+}
+
+.card-header .score-badge {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric {
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+/* 机会与风险 */
+.opportunities-risks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.opportunities, .risks {
+  background: #1e1e1e;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  transition: all 0.3s;
+}
+
+.opportunities:hover, .risks:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  border-color: #1890ff;
+}
+
+.opportunities h4, .risks h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+}
+
+.opportunities ul, .risks ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #e0e0e0;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.opportunities li {
+  margin-bottom: 8px;
+}
+
+.risks li {
+  margin-bottom: 8px;
+  color: #999;
+}
+
+/* 底部按钮 */
+.analysis-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding-top: 16px;
+  border-top: 1px solid #333;
+}
+
+.refresh-btn {
+  background: #1890ff;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.refresh-btn:hover {
+  background: #40a9ff;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .stock-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .trend-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fundamental-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .opportunities-risks {
+    grid-template-columns: 1fr;
+  }
+
+  .main-recommendation {
+    flex-direction: column;
+  }
+
+  .time-frame {
+    flex-direction: column;
+  }
+}

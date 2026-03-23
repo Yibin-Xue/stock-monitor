@@ -1,0 +1,509 @@
+/* 深色主题 */
+body {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+/* 导航栏 */
+.navbar {
+  background: #2d2d2d !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.nav-link {
+  color: #e0e0e0 !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #1890ff !important;
+}
+
+/* 页脚 */
+.footer {
+  background: #2d2d2d !important;
+  border-top: 1px solid #3d3d3d !important;
+}
+
+.footer-info p,
+.footer-links a {
+  color: #a0a0a0 !important;
+}
+
+.footer-links a:hover {
+  color: #1890ff !important;
+}
+
+/* 数据项 */
+.data-item {
+  background: #2d2d2d !important;
+}
+
+.data-label {
+  color: #a0a0a0 !important;
+}
+
+.data-value {
+  color: #e0e0e0 !important;
+}
+
+/* 行业分类 */
+.industry-header {
+  background: #2d2d2d !important;
+}
+
+.industry-header:hover {
+  background: #3d3d3d !important;
+}
+
+.industry-content {
+  border: 1px solid #3d3d3d !important;
+  background: #2d2d2d !important;
+}
+
+/* 搜索结果 */
+.search-results {
+  background: #2d2d2d !important;
+}
+
+/* 股票项 */
+.stock-item {
+  background: #2d2d2d !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.stock-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.stock-code {
+  color: #a0a0a0 !important;
+}
+
+.stock-name {
+  color: #e0e0e0 !important;
+}
+
+.stock-price {
+  color: #e0e0e0 !important;
+}
+
+/* 板块项 */
+.sector-item {
+  background: #2d2d2d !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.sector-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.sector-name {
+  color: #e0e0e0 !important;
+}
+
+.sector-leader {
+  color: #a0a0a0 !important;
+}
+
+/* 行业动态 */
+.news-item {
+  background: #2d2d2d !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.news-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.news-title {
+  color: #e0e0e0 !important;
+}
+
+.news-time {
+  color: #a0a0a0 !important;
+}
+
+.news-content {
+  color: #c0c0c0 !important;
+}
+
+/* 景气度评分 */
+.sentiment-item {
+  background: #2d2d2d !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.sentiment-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.industry-name {
+  color: #e0e0e0 !important;
+}
+
+.score-value {
+  color: #e0e0e0 !important;
+}
+
+.景气度-bar {
+  background: #3d3d3d !important;
+}
+
+/* 投资建议 */
+.advice-card {
+  background: #1a2e1a !important;
+  border-left: 4px solid #1890ff !important;
+}
+
+.advice-title {
+  color: #e0e0e0 !important;
+}
+
+.advice-content {
+  color: #c0c0c0 !important;
+}
+
+.advice-probability {
+  color: #a0a0a0 !important;
+}
+
+/* 风险提示 */
+.risk-warning {
+  background: #2e1a1a !important;
+  border-left: 4px solid #ff4d4f !important;
+}
+
+.risk-title {
+  color: #ff4d4f !important;
+}
+
+.risk-content {
+  color: #c0c0c0 !important;
+}
+
+/* 专家观点 */
+.expert-card {
+  background: #1a2e1a !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  border-left: 4px solid #52c41a !important;
+}
+
+.expert-title {
+  color: #e0e0e0 !important;
+}
+
+.expert-content {
+  color: #c0c0c0 !important;
+}
+
+.expert-source {
+  color: #a0a0a0 !important;
+}
+
+/* 公司项 */
+.company-label {
+  color: #a0a0a0 !important;
+}
+
+.company-value {
+  color: #e0e0e0 !important;
+}
+
+/* 行业规模项 */
+.industry-scale-item {
+  border-bottom: 1px solid #3d3d3d !important;
+}
+
+.industry-scale-label {
+  color: #a0a0a0 !important;
+}
+
+.industry-scale-value {
+  color: #e0e0e0 !important;
+}
+
+/* 财务指标项 */
+.financial-item {
+  border-bottom: 1px solid #3d3d3d !important;
+}
+
+.financial-label {
+  color: #a0a0a0 !important;
+}
+
+.financial-value {
+  color: #e0e0e0 !important;
+}
+
+/* 趋势列表 */
+.trends-list li {
+  color: #c0c0c0 !important;
+}
+
+/* 企业列表 */
+.company-item {
+  background: #2d2d2d !important;
+}
+
+.company-name {
+  color: #e0e0e0 !important;
+}
+
+/* 指标选择器 */
+.indicator-selector button {
+  background: #2d2d2d !important;
+  border: 1px solid #3d3d3d !important;
+  color: #e0e0e0 !important;
+}
+
+.indicator-selector button:hover {
+  border-color: #1890ff !important;
+  color: #1890ff !important;
+}
+
+.indicator-selector button.active {
+  background: #1890ff !important;
+  color: #fff !important;
+  border-color: #1890ff !important;
+}
+
+/* 加载覆盖层 */
+.loading-overlay {
+  background: rgba(26, 26, 26, 0.8) !important;
+}
+
+/* 骨架屏 */
+.skeleton {
+  background: linear-gradient(90deg, #2d2d2d 25%, #3d3d3d 50%, #2d2d2d 75%) !important;
+}
+
+.skeleton-card {
+  background: #2d2d2d !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 徽章 */
+.badge-primary {
+  background: #1a3a5a !important;
+  color: #1890ff !important;
+}
+
+.badge-success {
+  background: #1a3a1a !important;
+  color: #52c41a !important;
+}
+
+.badge-warning {
+  background: #3a3a1a !important;
+  color: #faad14 !important;
+}
+
+.badge-danger {
+  background: #3a1a1a !important;
+  color: #ff4d4f !important;
+}
+
+/* 标签 */
+.tag-default {
+  background: #3d3d3d !important;
+  color: #e0e0e0 !important;
+}
+
+.tag-primary {
+  background: #1a3a5a !important;
+  color: #1890ff !important;
+}
+
+.tag-success {
+  background: #1a3a1a !important;
+  color: #52c41a !important;
+}
+
+.tag-warning {
+  background: #3a3a1a !important;
+  color: #faad14 !important;
+}
+
+.tag-danger {
+  background: #3a1a1a !important;
+  color: #ff4d4f !important;
+}
+
+/* 分隔线 */
+.divider {
+  background: #3d3d3d !important;
+}
+
+/* 标题样式 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #e0e0e0 !important;
+}
+
+/* 段落样式 */
+p {
+  color: #c0c0c0 !important;
+}
+
+/* 列表样式 */
+ul, 
+ol {
+  color: #c0c0c0 !important;
+}
+
+li {
+  color: #c0c0c0 !important;
+}
+
+/* 代码样式 */
+code {
+  background: #3d3d3d !important;
+  color: #e0e0e0 !important;
+}
+
+pre {
+  background: #3d3d3d !important;
+}
+
+pre code {
+  color: #e0e0e0 !important;
+}
+
+/* 空状态 */
+.empty-state {
+  color: #a0a0a0 !important;
+}
+
+.empty-state-subtext {
+  color: #808080 !important;
+}
+
+/* 表格样式 */
+.table th {
+  background: #2d2d2d !important;
+  border-bottom: 1px solid #3d3d3d !important;
+  color: #e0e0e0 !important;
+}
+
+.table td {
+  border-bottom: 1px solid #3d3d3d !important;
+  color: #e0e0e0 !important;
+}
+
+.table tr:hover {
+  background: #3d3d3d !important;
+}
+
+/* 分页样式 */
+.pagination button {
+  background: #2d2d2d !important;
+  border: 1px solid #3d3d3d !important;
+  color: #e0e0e0 !important;
+}
+
+.pagination button:hover {
+  border-color: #1890ff !important;
+  color: #1890ff !important;
+}
+
+.pagination button.active {
+  background: #1890ff !important;
+  color: #fff !important;
+  border-color: #1890ff !important;
+}
+
+/* 下拉菜单 */
+.select {
+  background: #2d2d2d !important;
+  border: 1px solid #3d3d3d !important;
+  color: #e0e0e0 !important;
+}
+
+.select:focus {
+  border-color: #1890ff !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* 卡片样式 */
+.card {
+  background: #2d2d2d !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.card-title {
+  color: #e0e0e0 !important;
+}
+
+.card-content {
+  color: #c0c0c0 !important;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2d2d2d;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* 加载状态 */
+.loading {
+  color: #a0a0a0 !important;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: 4px solid #1890ff !important;
+}
+
+/* 智能深度报告 */
+.intelligent-report {
+  background: #2d2d2d !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.report-placeholder {
+  color: #c0c0c0 !important;
+}
+
+.report-loading {
+  color: #a0a0a0 !important;
+}
+
+.report-result {
+  color: #e0e0e0 !important;
+}
+
+.report-section h5 {
+  color: #e0e0e0 !important;
+}
+
+.report-section p {
+  color: #c0c0c0 !important;
+}
+
+.report-source,
+.report-disclaimer {
+  color: #a0a0a0 !important;
+}
