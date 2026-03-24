@@ -6,8 +6,5 @@
   "routes": [
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "buildEnv": {
-    "VITE_API_BASE_URL": "https://stock-monitor-iy20.onrender.com"
-  }
+  ]
 }
