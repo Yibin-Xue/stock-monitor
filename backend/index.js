@@ -16,29 +16,38 @@ console.log('环境变量加载完成:', {
 const app = express();
 const port = process.env.PORT || 3003;
 
-// CORS配置 - 支持部署环境
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://stock-monitor.vercel.app',
-  'https://*.vercel.app',
-  process.env.FRONTEND_URL
-].filter(Boolean);
-
-app.use(cors({
+// CORS配置 - 支持本地开发和线上部署
+const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.some(allowed =>
-      origin === allowed || allowed.includes('*') && origin.match(allowed.replace('*', '.*'))
-    )) {
-      callback(null, true);
-    } else {
-      console.error('CORS错误: 不允许的源', origin);
-      callback(new Error('Not allowed by CORS'));
+    // 允许无 origin 的请求（如 curl、Postman）
+    if (!origin) return callback(null, true);
+
+    // 生产环境：如果设置了 FRONTEND_URL 只允许指定域名，否则允许所有
+    if (process.env.NODE_ENV === 'production') {
+      if (process.env.FRONTEND_URL) {
+        const allowed = process.env.FRONTEND_URL.split(',').map(u => u.trim());
+        if (allowed.some(u => origin === u || origin.endsWith(u.replace('https://', '')))) {
+          return callback(null, true);
+        }
+        console.error('CORS拒绝:', origin);
+        return callback(new Error('Not allowed by CORS'));
+      }
+      // 未配置 FRONTEND_URL 时允许所有（方便初次部署测试）
+      return callback(null, true);
     }
+
+    // 开发环境：允许本地所有端口
+    const devAllowed = ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:4173'];
+    if (devAllowed.includes(origin)) return callback(null, true);
+
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+app.use(cors(corsOptions));
 
 // 中间件
 app.use(express.json());
