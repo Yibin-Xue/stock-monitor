@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import './StockAnalysis.css';
 
+// API 基础地址，优先使用环境变量，开发环境默认本地
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3003';
+
 const StockAnalysis = ({ code, name, onClose }) => {
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -12,7 +15,7 @@ const StockAnalysis = ({ code, name, onClose }) => {
     setAnalysis(null);
 
     try {
-      const response = await fetch(`http://localhost:3002/api/analysis/${code}/analyze`);
+      const response = await fetch(`${API_BASE}/api/analysis/${code}/analyze`);
       const result = await response.json();
 
       if (result.code === 200) {

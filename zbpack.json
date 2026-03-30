@@ -1,0 +1,6 @@
+{
+  "build": {
+    "type": "nodejs",
+    "root": "./backend"
+  }
+}

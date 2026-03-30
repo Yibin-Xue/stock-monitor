@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// API 基础地址，优先使用环境变量，开发环境默认本地
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3003';
+
 const stockStore = create(
   persist(
     (set, get) => ({
@@ -34,7 +37,7 @@ const stockStore = create(
       searchStocks: async (keyword) => {
         set({ loading: { ...get().loading, search: true }, error: null });
         try {
-          const response = await fetch(`http://localhost:3002/api/stocks/search?keyword=${encodeURIComponent(keyword)}`);
+          const response = await fetch(`${API_BASE}/api/stocks/search?keyword=${encodeURIComponent(keyword)}`);
           const result = await response.json();
 
           if (result.code === 200) {
@@ -80,7 +83,7 @@ const stockStore = create(
           const updatedWatchlist = await Promise.all(
             watchlist.map(async (stock) => {
               try {
-                const response = await fetch(`http://localhost:3002/api/stocks/${stock.code}`);
+                const response = await fetch(`${API_BASE}/api/stocks/${stock.code}`);
                 const result = await response.json();
                 if (result.code === 200 && result.data) {
                   return {
@@ -120,8 +123,8 @@ const stockStore = create(
         try {
           // 调用真实的API获取市场数据
           const [indicesResponse, sectorsResponse] = await Promise.all([
-            fetch('http://localhost:3002/api/market/indices'),
-            fetch('http://localhost:3002/api/market/sectors')
+            fetch(`${API_BASE}/api/market/indices`),
+            fetch(`${API_BASE}/api/market/sectors`)
           ]);
           
           const indicesResult = await indicesResponse.json();
@@ -152,7 +155,7 @@ const stockStore = create(
         set({ loading: { ...get().loading, industry: true }, error: null });
         try {
           // 调用真实的API获取行业数据
-          const sentimentResponse = await fetch('http://localhost:3002/api/industry/sentiment');
+          const sentimentResponse = await fetch(`${API_BASE}/api/industry/sentiment`);
           const sentimentResult = await sentimentResponse.json();
           
           const industrySentiment = sentimentResult.code === 200 ? sentimentResult.data : [];
@@ -170,7 +173,7 @@ const stockStore = create(
             // 为每个行业获取动态新闻
             const newsPromises = formattedSentiment.slice(0, 2).map(async (item) => {
               try {
-                const newsResponse = await fetch(`http://localhost:3002/api/industry/news?industry=${encodeURIComponent(item.industry)}`);
+                const newsResponse = await fetch(`${API_BASE}/api/industry/news?industry=${encodeURIComponent(item.industry)}`);
                 const newsResult = await newsResponse.json();
                 if (newsResult.code === 200 && newsResult.data) {
                   return {
