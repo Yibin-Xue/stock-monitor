@@ -71,9 +71,9 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Stock backend service is running' });
 });
 
-// 启动服务器
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// 启动服务器 - 绑定到 0.0.0.0 以支持云平台部署
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running on port ${port} (binding to 0.0.0.0)`);
 });
 
 module.exports = app;
