@@ -11,6 +11,10 @@ RUN npm install --only=production
 # 复制 backend 所有源码
 COPY backend/ .
 
+# 调试：打印文件列表
+RUN ls -la
+
 EXPOSE 3003
 
-CMD ["node", "index.js"]
+# 使用 npm start 而不是直接 node
+CMD ["npm", "start"]
