@@ -2,10 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-// 加载环境变量 - 确保在其他模块加载之前调用
-dotenv.config({
-  path: '.env'
-});
+// 加载环境变量 - 云平台直接注入环境变量，本地开发用 .env 文件
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({
+    path: '.env'
+  });
+}
 
 console.log('环境变量加载完成:', {
   ARK_API_KEY: process.env.ARK_API_KEY ? '已配置' : '未配置',
