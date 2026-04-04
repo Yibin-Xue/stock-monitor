@@ -831,82 +831,140 @@ async function getLimitStats() {
 
 /**
  * 获取申万行业板块涨跌（用于 A股板块榜）
- * Tushare API: sw_daily（申万行业日线行情）
+ * 方案1: Tushare sw_daily 接口
+ * 方案2: 如果 sw_daily 权限不够，用 index_daily 获取主要行业指数作为替代
  */
 async function getSWIndustryRank() {
   try {
     const dates = getRecentTradeDate();
-
-    // 尝试从最近 7 天内获取申万行业数据
     let dailyData = null;
+
+    // 方案1：尝试 sw_daily
     for (const date of dates) {
       try {
         dailyData = await callTushareAPI('sw_daily', {
           trade_date: date,
-        }, 'ts_code,name,close,pre_close,change,pct_change,vol,amount,pe,pb');
+        }, 'ts_code,name,close,pre_close,change,pct_change,vol,amount');
         if (dailyData && dailyData.items && dailyData.items.length > 0) {
-          console.log(`[申万行业] 成功获取 ${date} 的 ${dailyData.items.length} 个行业数据`);
+          console.log(`[申万行业] sw_daily 成功获取 ${date} 的 ${dailyData.items.length} 个行业数据`);
+          console.log(`[申万行业] fields: ${JSON.stringify(dailyData.fields)}`);
           break;
         }
       } catch (err) {
-        console.warn(`[申万行业] ${date} 数据获取失败，尝试下一个日期`);
+        console.warn(`[申万行业] sw_daily ${date} 失败: ${err.message}`);
         continue;
       }
     }
 
-    if (!dailyData || !dailyData.items || dailyData.items.length === 0) {
-      throw new Error('最近 7 天内未找到申万行业数据');
-    }
-
-    // Debug: 打印第一条数据和字段映射
-    console.log('[申万行业] fields:', JSON.stringify(dailyData.fields));
-    if (dailyData.items.length > 0) {
-      console.log('[申万行业] first item:', JSON.stringify(dailyData.items[0]));
-    }
-
-    const fields = dailyData.fields || ['ts_code','name','close','pre_close','change','pct_change','vol','amount'];
-    
-    const rows = dailyData.items.map(item => {
-      let name, pct_change;
-      
-      if (Array.isArray(item)) {
-        // 按字段名找正确索引
-        const idxName = fields.indexOf('name');
-        const idxPctChg = fields.indexOf('pct_change');
-        name = idxName >= 0 ? item[idxName] : item[1];
-        // pct_change 应该是小数（如 -2.5 表示 -2.5%），如果值过大则尝试 change 字段
-        let rawPct = idxPctChg >= 0 ? parseFloat(item[idxPctChg]) : NaN;
-        if (Math.abs(rawPct) > 100) {
-          // 如果 pct_change 值异常大，说明映射错误，用 change 字段代替（可能是涨跌点数）
-          const idxChange = fields.indexOf('change');
-          rawPct = idxChange >= 0 ? parseFloat(item[idxChange]) : 0;
+    if (dailyData && dailyData.items && dailyData.items.length > 0) {
+      // 解析 sw_daily 数据 — 动态字段映射
+      const fields = dailyData.fields || [];
+      const rows = dailyData.items.map(item => {
+        let name = '', pct_change = 0;
+        
+        if (Array.isArray(item)) {
+          const idxName = fields.indexOf('name');
+          const idxPctChg = fields.indexOf('pct_change');
+          const idxClose = fields.indexOf('close');
+          const idxPreClose = fields.indexOf('pre_close');
+          
+          name = (idxName >= 0 ? item[idxName] : item[1]) || '未知';
+          
+          // 优先用 pct_change 字段
+          if (idxPctChg >= 0) {
+            pct_change = parseFloat(item[idxPctChg]) || 0;
+          } else if (idxClose >= 0 && idxPreClose >= 0) {
+            // 用 (close - pre_close) / pre_close * 100 计算
+            const close = parseFloat(item[idxClose]) || 0;
+            const preClose = parseFloat(item[idxPreClose]) || 1;
+            pct_change = preClose > 0 ? ((close - preClose) / preClose * 100) : 0;
+          }
+        } else {
+          name = item.name || '未知';
+          pct_change = parseFloat(item.pct_change) || 0;
+          if (Math.abs(pct_change) > 1000 && item.close && item.pre_close) {
+            pct_change = ((parseFloat(item.close) - parseFloat(item.pre_close)) / parseFloat(item.pre_close) * 100);
+          }
         }
-        pct_change = isNaN(rawPct) ? 0 : rawPct;
-      } else {
-        name = item.name;
-        let rawPct = parseFloat(item.pct_change);
-        if (Math.abs(rawPct) > 100) rawPct = parseFloat(item.change) || 0;
-        pct_change = isNaN(rawPct) ? 0 : rawPct;
-      }
+        
+        return { name, pct_change };
+      });
 
+      rows.sort((a, b) => b.pct_change - a.pct_change);
+      
       return {
-        name: name,
-        code: row.ts_code || (Array.isArray(item) ? item[0] : item.ts_code),
-        pct_change: pct_change,
+        top5: rows.slice(0, 5),
+        bottom5: rows.slice(-5).reverse(),
+        all: rows,
+        source: 'sw_daily',
       };
-    });
+    }
 
-    rows.sort((a, b) => b.pct_change - a.pct_change);
+    // 方案2：sw_daily 失败，用主要行业指数代替
+    console.warn('[申万行业] sw_daily 不可用，回退到行业指数方案');
+    return await getSectorRankFromIndex();
 
-    return {
-      top5: rows.slice(0, 5).map(r => ({ name: r.name, pct_change: r.pct_change })),
-      bottom5: rows.slice(-5).reverse().map(r => ({ name: r.name, pct_change: r.pct_change })),
-      all: rows,
-    };
   } catch (err) {
-    console.warn('getSWIndustryRank 失败（跳过）:', err.message);
+    console.error('[申万行业] 全部失败:', err.message);
     return null;
   }
+}
+
+/**
+ * 回退方案：通过主要行业指数涨跌幅来模拟行业排名
+ */
+async function getSectorRankFromIndex() {
+  // 主要行业指数代码（沪深交易所）
+  const sectorIndexes = [
+    { code: '000016.SH', name: '上证50' },
+    { code: '399006.SZ', name: '创业板指' },
+    { code: '000688.SH', name: '科创50' },
+    { code: '399001.SZ', name: '深证成指' },
+    { code: '000300.SH', name: '沪深300' },
+    { code: '000905.SH', name: '中证500' },
+    { code: '000852.SH', name: '中证1000' },
+    { code: '399671.SZ', name: '深证1000' },
+    { code: '399303.SZ', name: '国证1000' },
+    { code: '000688.SH', name: '科创板' },
+  ];
+
+  const results = [];
+  for (const si of sectorIndexes) {
+    try {
+      const data = await callTushareAPI('index_daily', {
+        ts_code: si.code,
+        start_date: getRecentDate(5),
+        end_date: getTodayDate(),
+      }, 'ts_code,trade_date,close,pre_close,pct_chg');
+      
+      if (data && data.items && data.items.length > 0) {
+        const latest = data.items[0];
+        const row = Array.isArray(latest) ? {
+          close: parseFloat(latest[2]),
+          pre_close: parseFloat(latest[3]),
+          pct_chg: parseFloat(latest[5]),
+        } : latest;
+        
+        results.push({
+          name: si.name,
+          pct_change: row.pct_chg || (row.pre_close > 0 ? ((row.close - row.pre_close) / row.pre_close * 100) : 0),
+        });
+      }
+    } catch (e) {
+      continue;
+    }
+  }
+
+  if (results.length === 0) return null;
+
+  results.sort((a, b) => b.pct_change - a.pct_change);
+  
+  return {
+    top5: results.slice(0, 5),
+    bottom5: results.slice(-5).reverse().slice(0, 5),
+    all: results,
+    source: 'index_fallback',
+  };
 }
 
 /**
