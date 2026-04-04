@@ -1,14 +1,19 @@
 // API服务层
 import axios from 'axios';
 
+// 强制指定 API 后端地址，避免构建时环境变量丢失导致请求发到错误域名
+const API_BACKEND = import.meta.env.VITE_API_BASE_URL || 'https://stock-monitor.zeabur.app';
+
 // 创建axios实例 - 支持部署环境
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api` : 'https://stock-monitor.zeabur.app/api',
+  baseURL: `${API_BACKEND}/api`,
   timeout: 10000, // 超时时间
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+console.log('[API] baseURL:', api.defaults.baseURL);
 
 // 请求拦截器
 api.interceptors.request.use(

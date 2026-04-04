@@ -340,7 +340,17 @@ const StockDetailPage = () => {
       // 调用大模型API生成深度分析报告
       const llmResponse = await aiApi.generateLLMReport(code);
       
-      console.log('[前端] 大模型报告生成成功', llmResponse);
+      console.log('[前端] 大模型报告响应:', llmResponse);
+      
+      // 防御性检查：确保 data 和 report 存在
+      if (!llmResponse || !llmResponse.data) {
+        throw new Error('服务器返回数据为空');
+      }
+      
+      if (!llmResponse.data.report) {
+        console.warn('[前端] report 字段为空，完整响应:', JSON.stringify(llmResponse.data).substring(0, 500));
+        throw new Error(llmResponse.data.error || llmResponse.data.message || '分析报告生成失败，请稍后重试');
+      }
       
       // 设置报告数据
       setReportData(llmResponse.data.report);
@@ -355,7 +365,7 @@ const StockDetailPage = () => {
     } catch (error) {
       console.error('[前端] 生成报告失败:', error);
       console.error('错误堆栈:', error.stack);
-      const errorMsg = error.response?.data?.message || error.message || '未知错误';
+      const errorMsg = error.response?.data?.message || error.response?.data?.error || error.message || '未知错误';
       alert('生成报告失败: ' + errorMsg + '\n\n详情请查看 Console（F12）');
     } finally {
       setGeneratingReport(false);

@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 
 // API 基础地址，优先使用环境变量，生产环境默认 Zeabur 后端
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://stock-monitor.zeabur.app';
+console.log('[stockStore] API_BASE:', API_BASE);
 
 const stockStore = create(
   persist(
