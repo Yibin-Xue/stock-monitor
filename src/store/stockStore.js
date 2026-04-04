@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// API 基础地址，优先使用环境变量，开发环境默认本地
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3003';
+// API 基础地址，优先使用环境变量，生产环境默认 Zeabur 后端
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://stock-monitor.zeabur.app';
 
 const stockStore = create(
   persist(

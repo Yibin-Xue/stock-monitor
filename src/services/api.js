@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // 创建axios实例 - 支持部署环境
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api` : 'http://localhost:3003/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api` : 'https://stock-monitor.zeabur.app/api',
   timeout: 10000, // 超时时间
   headers: {
     'Content-Type': 'application/json',
