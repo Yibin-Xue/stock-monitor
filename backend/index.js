@@ -68,7 +68,15 @@ app.use('/api/industry', industryRoutes);
 app.use('/api/report', reportRoutes);
 app.use('/api/analysis', analysisRoutes);
 
-// 健康检查
+// 健康检查（支持多种路径）
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'Stock backend service is running', timestamp: new Date().toISOString() });
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Stock backend service is running' });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Stock backend service is running' });
 });
