@@ -858,23 +858,41 @@ async function getSWIndustryRank() {
       throw new Error('最近 7 天内未找到申万行业数据');
     }
 
+    // Debug: 打印第一条数据和字段映射
+    console.log('[申万行业] fields:', JSON.stringify(dailyData.fields));
+    if (dailyData.items.length > 0) {
+      console.log('[申万行业] first item:', JSON.stringify(dailyData.items[0]));
+    }
+
+    const fields = dailyData.fields || ['ts_code','name','close','pre_close','change','pct_change','vol','amount'];
+    
     const rows = dailyData.items.map(item => {
-      const row = Array.isArray(item)
-        ? {
-            ts_code: item[0], name: item[1],
-            close: parseFloat(item[4]) || 0,
-            pre_close: 0,  // sw_daily 接口没有 pre_close 字段
-            change: parseFloat(item[5]) || 0,
-            pct_change: parseFloat(item[6]) || 0,
-            vol: parseFloat(item[7]) || 0,
-            amount: parseFloat(item[8]) || 0,
-          }
-        : { ...item, pct_change: parseFloat(item.pct_change) || 0 };
+      let name, pct_change;
+      
+      if (Array.isArray(item)) {
+        // 按字段名找正确索引
+        const idxName = fields.indexOf('name');
+        const idxPctChg = fields.indexOf('pct_change');
+        name = idxName >= 0 ? item[idxName] : item[1];
+        // pct_change 应该是小数（如 -2.5 表示 -2.5%），如果值过大则尝试 change 字段
+        let rawPct = idxPctChg >= 0 ? parseFloat(item[idxPctChg]) : NaN;
+        if (Math.abs(rawPct) > 100) {
+          // 如果 pct_change 值异常大，说明映射错误，用 change 字段代替（可能是涨跌点数）
+          const idxChange = fields.indexOf('change');
+          rawPct = idxChange >= 0 ? parseFloat(item[idxChange]) : 0;
+        }
+        pct_change = isNaN(rawPct) ? 0 : rawPct;
+      } else {
+        name = item.name;
+        let rawPct = parseFloat(item.pct_change);
+        if (Math.abs(rawPct) > 100) rawPct = parseFloat(item.change) || 0;
+        pct_change = isNaN(rawPct) ? 0 : rawPct;
+      }
 
       return {
-        name: row.name,
-        code: row.ts_code,
-        pct_change: row.pct_change,
+        name: name,
+        code: row.ts_code || (Array.isArray(item) ? item[0] : item.ts_code),
+        pct_change: pct_change,
       };
     });
 
