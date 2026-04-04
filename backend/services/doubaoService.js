@@ -2,11 +2,19 @@ const OpenAI = require('openai');
 
 class DoubaoService {
   constructor() {
-    this.client = new OpenAI({
-      apiKey: process.env.DOUBAO_API_KEY,
-      baseURL: process.env.DOUBAO_BASE_URL || 'https://ark.cn-beijing.volces.com/api/v3',
-    });
-    this.model = process.env.DOUBAO_MODEL || 'doubao-seed-2-0-pro';
+    this.client = null;
+    this.model = null;
+  }
+
+  // 延迟初始化客户端（确保环境变量已加载）
+  init() {
+    if (!this.client) {
+      this.client = new OpenAI({
+        apiKey: process.env.DOUBAO_API_KEY,
+        baseURL: process.env.DOUBAO_BASE_URL || 'https://ark.cn-beijing.volces.com/api/v3',
+      });
+      this.model = process.env.DOUBAO_MODEL || 'doubao-seed-2-0-pro';
+    }
   }
 
   /**
@@ -15,6 +23,7 @@ class DoubaoService {
    * @returns {Promise<string>} 分析报告
    */
   async generateStockReport(stockData) {
+    this.init(); // 确保客户端已初始化
     const prompt = this.buildPrompt(stockData);
     
     // 打印传给 AI 的数据（调试用）
@@ -162,6 +171,7 @@ class DoubaoService {
    * 测试API连接
    */
   async testConnection() {
+    this.init(); // 确保客户端已初始化
     try {
       const response = await this.client.chat.completions.create({
         model: this.model,
