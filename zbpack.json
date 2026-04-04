@@ -1,6 +1,0 @@
-{
-  "app_dir": "backend",
-  "build_command": "npm install --no-cache",
-  "start_command": "npm start",
-  "install_command": "npm install --no-cache"
-}
