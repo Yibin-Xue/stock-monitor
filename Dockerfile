@@ -2,7 +2,8 @@ FROM node:18-alpine
 WORKDIR /app
 
 # 安装 Python（深度分析功能依赖 Python 脚本）
-RUN apk add --no-cache python3 py3-pip
+RUN apk add --no-cache python3 py3-pip && \
+    ln -sf /usr/bin/python3 /usr/bin/python
 
 # 复制 backend 目录内容
 COPY backend/package.json ./

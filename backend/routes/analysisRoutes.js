@@ -20,7 +20,9 @@ const ANALYSIS_SCRIPT_PATH = TUSHARE_TOKEN
  */
 function callAnalysisService(code) {
   return new Promise((resolve, reject) => {
-    const pythonProcess = spawn('python', [ANALYSIS_SCRIPT_PATH, 'analyze', code]);
+    // 兼容不同系统：Alpine 用 python3，其他系统可能用 python
+    const pythonCmd = process.platform === 'linux' || process.env.ALPINE ? 'python3' : 'python';
+    const pythonProcess = spawn(pythonCmd, [ANALYSIS_SCRIPT_PATH, 'analyze', code]);
 
     let stdout = '';
     let stderr = '';
