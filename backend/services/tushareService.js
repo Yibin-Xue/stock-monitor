@@ -47,16 +47,7 @@ async function getStockBasic() {
     }, 'ts_code,symbol,name,area,industry,list_date,exchange');
   } catch (error) {
     console.error('获取股票基本信息失败:', error);
-    // 返回模拟数据作为 fallback
-    return {
-      items: [
-        ['600519.SH', '600519', '贵州茅台', '贵州', '白酒', '2001-08-27', 'SH'],
-        ['000858.SZ', '000858', '五粮液', '四川', '白酒', '1998-04-27', 'SZ'],
-        ['000001.SZ', '000001', '平安银行', '深圳', '银行', '1991-04-03', 'SZ'],
-        ['000002.SZ', '000002', '万科A', '深圳', '房地产', '1991-01-29', 'SZ'],
-        ['601318.SH', '601318', '中国平安', '深圳', '保险', '2007-03-01', 'SH']
-      ]
-    };
+    return null;
   }
 }
 
@@ -115,36 +106,7 @@ async function searchStocks(keyword) {
     });
   } catch (error) {
     console.error('搜索股票失败:', error);
-    // 返回模拟数据作为 fallback
-    return [
-      {
-        ts_code: '600519.SH',
-        code: '600519',
-        name: '贵州茅台',
-        symbol: '600519',
-        exchange: 'SH',
-        industry: '白酒',
-        list_date: '2001-08-27'
-      },
-      {
-        ts_code: '000858.SZ',
-        code: '000858',
-        name: '五粮液',
-        symbol: '000858',
-        exchange: 'SZ',
-        industry: '白酒',
-        list_date: '1998-04-27'
-      },
-      {
-        ts_code: '000001.SZ',
-        code: '000001',
-        name: '平安银行',
-        symbol: '000001',
-        exchange: 'SZ',
-        industry: '银行',
-        list_date: '1991-04-03'
-      }
-    ];
+    return [];
   }
 }
 
@@ -211,22 +173,7 @@ async function getStockRealtime(tsCode) {
     };
   } catch (error) {
     console.error('获取股票实时行情失败:', error);
-    // 返回模拟数据作为 fallback
-    return {
-      ts_code: tsCode,
-      code: tsCode.split('.')[0],
-      name: '模拟股票',
-      trade_date: '2026-03-20',
-      open: 99.50,
-      high: 101.00,
-      low: 99.00,
-      close: 100.00,
-      pre_close: 99.00,
-      change: 1.00,
-      changePercent: '1.01',
-      vol: 1000000,
-      amount: 100000000,
-    };
+    return null;
   }
 }
 
@@ -291,35 +238,7 @@ async function getStockKline(tsCode, period = 'day') {
     });
   } catch (error) {
     console.error('获取K线数据失败:', error);
-    // 返回模拟数据作为 fallback
-    const klineData = [];
-    const today = new Date('2026-03-20');
-    let price = 100.00;
-    
-    for (let i = 30; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split('T')[0];
-      
-      const open = price;
-      const high = price + Math.random() * 2;
-      const low = price - Math.random() * 2;
-      const close = low + Math.random() * (high - low);
-      const volume = Math.floor(Math.random() * 1000000) + 500000;
-      
-      klineData.push([
-        dateStr,
-        parseFloat(open.toFixed(2)),
-        parseFloat(high.toFixed(2)),
-        parseFloat(low.toFixed(2)),
-        parseFloat(close.toFixed(2)),
-        volume
-      ]);
-      
-      price = close;
-    }
-    
-    return klineData;
+    return [];
   }
 }
 
@@ -498,17 +417,38 @@ async function getStockInfo(tsCode) {
       turnover_rate: valuationData && valuationData.items && valuationData.items.length > 0 ? 
                     (Array.isArray(valuationData.items[0]) ? valuationData.items[0][7] : valuationData.items[0].turnover_rate) || 0 : 0,
       
-      // 财务指标
-      financial: {
-        roe: 15.5,
-        roa: 10.2,
-        profit_yoy: 25.3,
-        or_yoy: 18.7,
-        currentRatio: 1.5,
-        quickRatio: 1.2,
-        debtRatio: 45.6,
-        cashFlowToProfit: 1.0
-      }
+      // 财务指标（从真实 API 获取）
+      financial: (() => {
+        if (financialData && financialData.items && financialData.items.length > 0) {
+          const f = financialData.items[0];
+          if (Array.isArray(f)) {
+            return {
+              roe: f[2] || 0,
+              roa: f[3] || 0,
+              profit_yoy: f[4] || 0,
+              or_yoy: f[5] || 0,
+              currentRatio: f[6] || 0,
+              quickRatio: f[7] || 0,
+              debtRatio: f[8] || 0,
+              cashFlowToProfit: null,
+              end_date: f[1]
+            };
+          } else {
+            return {
+              roe: f.roe || 0,
+              roa: f.roa || 0,
+              profit_yoy: f.netprofit_yoy || 0,
+              or_yoy: f.op_yoy || 0,
+              currentRatio: f.current_ratio || 0,
+              quickRatio: f.quick_ratio || 0,
+              debtRatio: f.debt_to_assets || 0,
+              cashFlowToProfit: null,
+              end_date: f.end_date
+            };
+          }
+        }
+        return null;
+      })()
     };
     console.log('返回数据:', result);
     
@@ -516,37 +456,7 @@ async function getStockInfo(tsCode) {
     return result;
   } catch (error) {
     console.error('获取股票信息失败:', error);
-    // 返回模拟数据作为 fallback
-    return {
-      ts_code: tsCode,
-      code: tsCode.split('.')[0],
-      name: '模拟股票',
-      symbol: tsCode.split('.')[0],
-      exchange: tsCode.includes('SH') ? 'SH' : 'SZ',
-      industry: '科技',
-      market: 'A股',
-      list_date: '2020-01-01',
-      
-      // 最新行情
-      price: 100.00,
-      open: 99.50,
-      high: 101.00,
-      low: 99.00,
-      pre_close: 99.00,
-      change: 1.00,
-      changePercent: '1.01',
-      volume: 1000000,
-      turnover: 100000000,
-      trade_date: '2026-03-20',
-      
-      // 基本面指标
-      pe: 25.5,
-      pe_ttm: 24.8,
-      pb: 3.2,
-      total_mv: 10000000000,
-      circ_mv: 8000000000,
-      turnover_rate: 2.5,
-    };
+    return null;
   }
 }
 
@@ -600,17 +510,7 @@ async function getFinancialIndicator(tsCode) {
     }
   } catch (error) {
     console.error('获取财务指标失败:', error);
-    // 如果获取失败，返回默认值
-    return {
-      roe: 15.5,
-      roa: 10.2,
-      profit_yoy: 25.3,
-      or_yoy: 18.7,
-      currentRatio: 1.5,
-      quickRatio: 1.2,
-      debtRatio: 45.6,
-      cashFlowToProfit: 1.0
-    };
+    return null;
   }
 }
 
@@ -704,6 +604,11 @@ async function getIndustryDetail(industryName) {
     console.error('获取行业详情失败:', error);
     throw error;
   }
+}
+
+// 辅助函数：获取今天的日期（YYYYMMDD格式）
+function getTodayDate() {
+  return new Date().toISOString().split('T')[0].replace(/-/g, '');
 }
 
 // 辅助函数：获取最近交易日（如果今天没有就往前找）

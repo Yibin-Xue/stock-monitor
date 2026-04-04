@@ -194,42 +194,6 @@ const stockStore = create(
             console.error('获取行业动态失败:', e);
           }
           
-          // 如果没有获取到行业动态，使用默认数据
-          if (industryNews.length === 0) {
-            industryNews = [
-              {
-                industry: '半导体',
-                news: [
-                  {
-                    title: '半导体行业景气度持续回升',
-                    time: '2026-03-20 09:30',
-                    content: '根据最新数据，半导体行业景气度持续回升，产能利用率稳步提高。',
-                  },
-                  {
-                    title: '国产芯片取得重大突破',
-                    time: '2026-03-19 14:20',
-                    content: '某国产芯片企业宣布在高端芯片领域取得重大技术突破。',
-                  },
-                ],
-              },
-              {
-                industry: '新能源',
-                news: [
-                  {
-                    title: '新能源汽车销量再创新高',
-                    time: '2026-03-20 10:15',
-                    content: '3月新能源汽车销量同比增长35%，再创新高。',
-                  },
-                  {
-                    title: '电池技术获得新突破',
-                    time: '2026-03-18 16:45',
-                    content: '某电池企业宣布研发出高能量密度电池，续航里程提升20%。',
-                  },
-                ],
-              },
-            ];
-          }
-          
           set({
             industrySentiment: formattedSentiment,
             industryNews: industryNews,
